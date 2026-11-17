@@ -1,6 +1,46 @@
+## overview: 
+## This code studies changepoint estimation. A changepoint is a time point
+## where the underlying probability distribution abruptly changes. The data
+## are modelled as Poisson random variables where the mean parameter changes
+## abruptly over time, and we use optim to estimate the mean function and thus
+## infer the number and positions of the changepoints.
+## In this code:
+## - We simulate a data set from a Poisson model with a known mean function and
+##   known changepoints.
+## - We define the penalised cost function of the Poisson changepoint model 
+##   (the objective to be minimised), and its gradient and Hessian matrix, and
+##   test them by finite differencing.
+## - We fit the Poisson changepoint model to the simulated data set with a
+##   given penalty parameter, minimising the objective using the BFGS method.
+## - We find the best penalty parameter lambda by minimising the mBIC over a
+##   grid of values.
+## - We refit the changepoint model with the best penalty value to get the
+##   final estimate of beta, and use it to estimate the number and locations
+##   of the changepoints.
+## - We assess the uncertainty of the mean function by parametric bootstrapping,
+##   and use it to compute a bias corrected mean function and bias corrected
+##   95% confidence intervals.
 
+## outline:
+## 1. function definitions:
+## - poission_lasso_objective, poission_lasso_grad, poission_lasso_hess,
+##   compute the penalised cost function of the Poisson changepoint model and
+##   its gradient and Hessian matrix
+## - fd_test, test the gradient and Hessian matrix by finite differencing
+## - fit_changepoint, fit the model for a given penalty parameter using optim
+## - plt, plot the data with the true mean function and true changepoints
+## 2. analysis:
+## - simulate the data and test the derivative functions
+## - preliminary sanity check by fitting the model with the default penalty 
+##   parameter
+## - find the best penalty value that minimises the mBIC over a grid of values
+## - refit the changepoint model with the best penalty value to get the final
+##   estimate of beta, and estimate the number and locations of the changepoints
+## - parametric bootstrapping, and use bootstrap samples to compute the bias
+##   corrected mean function and 95% confidence intervals
+## - final plot
 
-## function definitions
+## function definitions:
 ## poission_lasso_objective: penalised cost function of the Poisson changepoint
 ## model
 ## inputs: beta, the parameter vector of length n, where beta_1 is the
